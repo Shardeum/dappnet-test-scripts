@@ -14,20 +14,15 @@ async function main() {
   const testToken = await TestToken.deploy("100000000000000000000");
 
   await testToken.deployed();
-  console.log("testToken deployed to:", testToken.address);
-   // Handle file exception for contract-address.txt
-    try {
-      fs.writeFileSync('contract-address.txt', contractAddress);
-      console.log("Contract address saved to contract-address.txt");
-    } catch (err) {
-      console.error("Error writing to contract-address.txt:", err);
-    }
-
-    //console.log("Contract address and ABI saved to contract-info.json");
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
+   console.log('CONTRACT_ADDRESS=' + testToken.address);
+  const contractInfo = {
+    address: testToken.address,
+    abi: testToken.interface.format("json"),
+  };
+  const contractAddress = testToken.address;
+  fs.writeFileSync('contract-info.json', JSON.stringify(contractInfo, null, 2));
+  fs.writeFileSync('contract-address.txt', contractAddress);
+  //console.log("Contract address and ABI saved to contract-info.json");
 }
 
 // We recommend this pattern to be able to use async/await everywhere
