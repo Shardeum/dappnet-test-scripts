@@ -26,14 +26,8 @@ jobs:
         run: |
           npx hardhat compile
           npx hardhat run scripts/deploy.js --network TESTNET
-          
-      - name: Debug Working Directory
-        run: |
-          pwd
-          ls -al ./contract_tests
         
       - name: Capture ERC20 contract address
-        working-directory: ./contract_tests
         id: capture-erc20-address
         run: |
           contract_address=$(cat contract-address.txt)
