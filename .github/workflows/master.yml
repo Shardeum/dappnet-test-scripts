@@ -3,6 +3,10 @@ name: Automated Contract Deployment and Interaction
 on:
   workflow_dispatch
 
+defaults:
+  run:
+    working-directory: ./contract_tests
+
 jobs:
   deploy_erc20:
     runs-on: ubuntu-latest
@@ -17,29 +21,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./contract_tests
-
+        
       - name: Compile and deploy ERC20 contract
         run: |
           npx hardhat compile
           npx hardhat run scripts/deploy.js --network TESTNET
-        working-directory: ./contract_tests
-
-      - name: Debug - List files in the directory
-        run: |
-          ls -al
-        working-directory: ${{ github.workspace }}
-      
-      - name: Debug - List files in the directory
-        run: |
-          ls -al
-        working-directory: ./contract_tests
-
-      - name: Debug - List files in the directory
-        run: |
-          ls -al
-        working-directory: ./scripts
-
+        
       - name: Capture ERC20 contract address
         id: capture-erc20-address
         run: |
@@ -49,7 +36,6 @@ jobs:
       - name: Interact with ERC20 contract
         run: |
           npx hardhat run scripts/interact.js --network TESTNET
-        working-directory: ./contract_tests
 
   deploy_erc721:
     runs-on: ubuntu-latest
