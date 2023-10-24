@@ -28,9 +28,10 @@ jobs:
           npx hardhat run scripts/deploy.js --network TESTNET
         
       - name: Capture ERC20 contract address
+        working-directory: ./contract_tests
         id: capture-erc20-address
         run: |
-          contract_address=$(cat contract-address.txt)
+          contract_address=$(cat ./contract_tests/contract-address.txt)
           echo "CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
 
       - name: Interact with ERC20 contract
