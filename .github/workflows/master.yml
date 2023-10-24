@@ -38,7 +38,7 @@ jobs:
       - name: Debug - List files in the directory
         run: |
           ls -al
-        working-directory: ../scripts
+        working-directory: ./scripts
 
       - name: Capture ERC20 contract address
         id: capture-erc20-address
