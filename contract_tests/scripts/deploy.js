@@ -1,20 +1,17 @@
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
+const fs = require("fs");
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
+ 
 
   // We get the contract to deploy
   const TestToken = await hre.ethers.getContractFactory("testToken");
   const testToken = await TestToken.deploy("100000000000000000000");
 
   await testToken.deployed();
-   console.log('CONTRACT_ADDRESS=' + testToken.address);
+  
+  console.log('CONTRACT_ADDRESS=' + testToken.address);
   const contractInfo = {
     address: testToken.address,
     abi: testToken.interface.format("json"),
