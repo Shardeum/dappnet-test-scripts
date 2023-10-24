@@ -24,6 +24,10 @@ jobs:
           npx hardhat compile
           npx hardhat run scripts/deploy.js --network TESTNET
         working-directory: ./contract_tests
+      
+      - name: Debug - List files in the directory
+        run: |
+          ls -al
 
       - name: Capture ERC20 contract address
         id: capture-erc20-address
