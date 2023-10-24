@@ -10,17 +10,17 @@ async function main() {
   const myNFT = await MyNFT.deploy();
 
   await myNFT.deployed();
-
-  console.log("NFT contract deployed to:", myNFT.address);
-
+  const contractAddress = myNFT.address;
+  console.log("CONTRACT_ADDRESS=", myNFT.address);
+  fs.writeFileSync('erc721-contract-address.txt', contractAddress);
   const contractInfo = {
     address: myNFT.address,
     abi: MyNFT.interface.format("json"),
   };
 
-  fs.writeFileSync('nft-contract-info.json', JSON.stringify(contractInfo, null, 2));
+  fs.writeFileSync('contract-info.json', JSON.stringify(contractInfo, null, 2));
 
-  console.log("Contract address and ABI saved to nft-contract-info.json");
+  //console.log("Contract address and ABI saved to contract-info.json");
 }
 
 main()
