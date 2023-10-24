@@ -1,7 +1,8 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ethers");
+require("dotenv").config();
 const { privateKeys } = require("./secrets.json");
-
+const { API_URL, PRIVATE_KEY } = process.env;
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async () => {
@@ -19,17 +20,18 @@ task("accounts", "Prints the list of accounts", async () => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  defaultNetwork: "sphinx",
+  defaultNetwork: "TESTNET",
   networks: {
     hardhat: {},
-    sphinx: {
-      url: "http://72.14.190.50:8090/",
-      chainId: 8081,
-      accounts: [privateKeys],
+    TESTNET: {
+      url: process.env.RPC, // Specify the URL for the testnet
+      chainId: parseInt(process.env.CHAIN_ID), // Parse the chain ID as an integer
+      gas: 2100000,
+      gasPrice: 50000000000,
+      accounts: [process.env.PRIVATE_KEY],
     },
   },
   solidity: {
-    //configure solidity version for compilation
     version: "0.8.1",
     settings: {
       optimizer: {
