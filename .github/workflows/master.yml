@@ -17,21 +17,25 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./contract_tests
 
       - name: Compile and deploy ERC20 contract
         run: |
           npx hardhat compile
           npx hardhat run scripts/deploy.js --network TESTNET
+        working-directory: ./contract_tests
 
       - name: Capture ERC20 contract address
         id: capture-erc20-address
         run: |
           contract_address=$(cat contract-address.txt)
           echo "CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
+        working-directory: ./contract_tests
 
       - name: Interact with ERC20 contract
         run: |
           npx hardhat run scripts/interact.js --network TESTNET
+        working-directory: ./contract_tests
 
   deploy_erc721:
     runs-on: ubuntu-latest
@@ -47,21 +51,25 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./contract_tests
 
       - name: Compile and deploy ERC721 contract
         run: |
           npx hardhat compile
           npx hardhat run scripts/deploy-nft.js --network TESTNET
+        working-directory: ./contract_tests
 
       - name: Capture ERC721 contract address
         id: capture-erc721-address
         run: |
           contract_address=$(cat erc721-contract-address.txt)
           echo "CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
+        working-directory: ./contract_tests
 
       - name: Interact with ERC721 contract
         run: |
           npx hardhat run scripts/interact-nft.js --network TESTNET
+        working-directory: ./contract_tests
 
   deploy_erc1155:
     runs-on: ubuntu-latest
@@ -77,18 +85,22 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./contract_tests
 
       - name: Compile and deploy ERC1155 contract
         run: |
           npx hardhat compile
           npx hardhat run scripts/deploy-erc1155.js --network TESTNET
+        working-directory: ./contract_tests
 
       - name: Capture ERC1155 contract address
         id: capture-erc1155-address
         run: |
           contract_address=$(cat erc1155-contract-address.txt)
           echo "CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
+        working-directory: ./contract_tests
 
       - name: Interact with ERC1155 contract
         run: |
           npx hardhat run scripts/interact-erc1155.js --network TESTNET
+        working-directory: ./contract_tests
