@@ -24,11 +24,21 @@ jobs:
           npx hardhat compile
           npx hardhat run scripts/deploy.js --network TESTNET
         working-directory: ./contract_tests
+
+      - name: Debug - List files in the directory
+        run: |
+          ls -al
+        working-directory: ${{ github.workspace }}
       
       - name: Debug - List files in the directory
         run: |
           ls -al
         working-directory: ./contract_tests
+
+      - name: Debug - List files in the directory
+        run: |
+          ls -al
+        working-directory: ./contract_test/scripts
 
       - name: Capture ERC20 contract address
         id: capture-erc20-address
