@@ -30,7 +30,6 @@ jobs:
         run: |
           contract_address=$(cat contract-address.txt)
           echo "CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
-        working-directory: ./contract_tests
 
       - name: Interact with ERC20 contract
         run: |
@@ -64,7 +63,6 @@ jobs:
         run: |
           contract_address=$(cat erc721-contract-address.txt)
           echo "CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
-        working-directory: ./contract_tests
 
       - name: Interact with ERC721 contract
         run: |
@@ -98,7 +96,6 @@ jobs:
         run: |
           contract_address=$(cat erc1155-contract-address.txt)
           echo "CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
-        working-directory: ./contract_tests
 
       - name: Interact with ERC1155 contract
         run: |
