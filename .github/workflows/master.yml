@@ -3,6 +3,10 @@ name: Automated Contract Deployment and Interaction
 on:
   workflow_dispatch
 
+defaults:
+  run:
+    working-directory: ./contract_tests
+
 jobs:
   deploy_erc20:
     runs-on: ubuntu-latest
