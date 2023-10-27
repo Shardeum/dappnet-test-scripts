@@ -1,15 +1,17 @@
-// scripts/deploy_uniswap_factory.js
+// scripts/deploy_uniswap_router.js
 const { ethers } = require("hardhat");
+require("dotenv").config();
 
 async function main() {
   const [deployer] = await ethers.getSigners();
+  const factoryAddress = process.env.UNISWAP_FACTORY;
 
-  const UniswapV2Factory = await ethers.getContractFactory("UniswapV2Factory");
-  const uniswapFactory = await UniswapV2Factory.deploy(deployer.address);
+  const UniswapV2Router = await ethers.getContractFactory("UniswapV2Router");
+  const uniswapRouter = await UniswapV2Router.deploy(factoryAddress, deployer.address);
 
-  await uniswapFactory.deployed();
+  await uniswapRouter.deployed();
 
-  console.log("Uniswap V2 Factory deployed to:", uniswapFactory.address);
+  console.log("Uniswap V2 Router deployed to:", uniswapRouter.address);
 }
 
 main()
