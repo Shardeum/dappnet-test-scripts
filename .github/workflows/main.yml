@@ -1,0 +1,43 @@
+name: Automated AMM
+
+on:
+  workflow_dispatch
+
+defaults:
+  run:
+    working-directory: ./AMM tests
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Deploy Uniswap Factory
+        run: npx hardhat run scripts/deploy_uniswap_factory.js
+
+      - name: Deploy Uniswap Router
+        run: npx hardhat run scripts/deploy_uniswap_router.js
+
+      - name: Store Addresses in .env
+        run: |
+          FACTORY_ADDRESS=$(cat contract-address.txt)
+          $ROUTER_ADDRESS=$(cat contract-address.txt)
+          echo "FACTORY_ADDRESS=$FACTORY_ADDRESS" >>  $GITHUB_ENV
+          echo "ROUTER_ADDRESS=$ROUTER_ADDRESS" >>  $GITHUB_ENV
+
+      - name: AMM Swap and Liquidity Scripts
+        run: |
+          npx hardhat run scripts/erc20swaps.js
+          npx hardhat run scripts/shmerc20.js
+          npx hardhat run scripts/lnterract-liquidity.js
