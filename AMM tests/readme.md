@@ -1,25 +1,34 @@
-Automated AMM GitHub Action
+# Automated AMM GitHub Action
+
 This GitHub Action automates Automated Market Maker (AMM) tasks using Hardhat and Node.js. It allows you to perform AMM-related operations like adding liquidity, swapping, and removing liquidity on the Ethereum blockchain.
 
-Prerequisites
-Before using this GitHub Action, ensure that you have:
+## Prerequisites
 
-Node.js (version 18.14.2) installed.
+Before using this GitHub Action, make sure you have the following prerequisites in place:
 
-An Alchemy API Key and replace the RPC value in your .env file with your Alchemy RPC URL.
+- **Node.js**: This Action uses Node.js, so ensure that you have Node.js installed. The specific version used is 18.14.2.
 
-Updated your .env file with Ethereum wallet configurations including PRIVATE_KEY, Your_Address, Receiver_Address, Spender_Address, and Operator_Address.
+- **GitHub Repository**: This Action should be used within a GitHub repository where you have the necessary permissions to create and run workflows.
 
-Updated your .env file with token addresses like TokenInAddress, TokenOutAddress, FACTORY_ADDRESS, ROUTER_ADDRESS, WETH_ADDRESS, and TOKEN_ADDRESS.
+- **Alchemy API Key**: Obtain an Alchemy API Key and replace the `RPC` value in your `.env` file with your Alchemy RPC URL.
 
-Usage
-GitHub Workflow Setup: Create a .github/workflows/main.yml file in your repository with the required workflow configuration.
+- **Ethereum Wallet Configuration**: Update the `.env` file with your Ethereum wallet configuration, including your `PRIVATE_KEY`, `Your_Address`, `Receiver_Address`, `Spender_Address`, and `Operator_Address`.
 
-Configuration File: Create a .env file in your repository with the Ethereum wallet and contract configuration as provided in your question.
+- **Token Addresses**: Update the `.env` file with the addresses of your relevant tokens, including `TokenInAddress`, `TokenOutAddress`, `FACTORY_ADDRESS`, `ROUTER_ADDRESS`, `WETH_ADDRESS`, and `TOKEN_ADDRESS`.
 
-Commit Changes: Commit both the .env and .github/workflows/main.yml files to your repository.
+## Usage
 
-Run Workflow:
+To use this GitHub Action, follow these steps:
+
+1. Create a `.github/workflows/main.yml` file in your repository with the following content:
+
+```yaml
+# Your main.yml content here
+- Create a .env file in your repository with your Ethereum wallet and contract configuration as provided in your question.
+
+Commit these changes to your repository.
+
+Now, whenever you want to run the Automated AMM workflow, follow these steps:
 
 Go to your GitHub repository.
 
@@ -27,11 +36,11 @@ Click on the "Actions" tab.
 
 Select the "Automated AMM" workflow.
 
-Click the "Run workflow" button to execute the AMM tasks specified in the main.yml file.
+Click the "Run workflow" button.
 
-Important: Keep your .env file secure and do not share it publicly as it contains sensitive information.
+The workflow will start and execute the AMM tasks as specified in the main.yml file, using the configuration from your .env file.
+
+Important Note: Make sure to keep your .env file secure and never share it publicly, as it contains sensitive information.
 
 Security Considerations
-As this Action involves private keys and sensitive information, exercise caution when sharing your repository with others. Utilize GitHub Secrets to securely store sensitive data and avoid exposing sensitive information in your repository.
-
-With this GitHub Action, you can easily automate AMM tasks in your Ethereum project, making it more efficient and less error-prone.
+Since this Action involves private keys and sensitive information, be cautious when sharing your repository with others. It's recommended to use GitHub Secrets to store sensitive data securely and avoid exposing sensitive information in your repository.
