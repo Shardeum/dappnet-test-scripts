@@ -1,10 +1,10 @@
 const { ethers } = require("hardhat");
 require("dotenv").config();
 
-const factoryAddress = "0x7c405447584366BC77f7ec9CbF867fc31b22ab9e";
-const routerAddress = "0xEF3b77F384461CA9F357fAAe1Dae0d005671c46B";
-const wethAddress = "0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9";
-const tokenAddress = "0x7D94d8E6d588cCa2307cB6B37830733a05370480";
+const factoryAddress = process.env.FACTORY_ADDRESS;
+const routerAddress = process.env.ROUTER_ADDRESS;
+const wethAddress = process.env.WETH_ADDRESS;
+const tokenAddress = process.env.TOKEN_ADDRESS;
 const privateKey = process.env.PRIVATE_KEY; // Replace with your private key
 
 async function addLiquidity() {

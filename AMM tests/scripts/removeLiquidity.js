@@ -1,7 +1,7 @@
 const { ethers } = require("hardhat");
 
-const routerAddress = "0xEF3b77F384461CA9F357fAAe1Dae0d005671c46B";
-const tokenAddress = "0x7D94d8E6d588cCa2307cB6B37830733a05370480";
+const routerAddress = process.env.ROUTER_ADDRESS;
+const tokenAddress = process.env.TOKEN_ADDRESS;
 const accountPrivateKey = process.env.PRIVATE_KEY; // Replace with your private key
 
 async function removeLiquidity() {

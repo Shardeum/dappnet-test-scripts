@@ -3,7 +3,7 @@ require("dotenv").config();
 
 const providerUrl = process.env.RPC;
 const privateKey = process.env.PRIVATE_KEY;
-const routerAddress = process.env.RouterAddress; // Uniswap Router contract address
+const routerAddress = process.env.ROUTER_ADDRESS; // Uniswap Router contract address
 const tokenInAddress = process.env.TokenInAddress; // Address of the token you want to swap
 const tokenOutAddress = process.env.TokenOutAddress; // Address of the token you want to receive
 const amountIn = ethers.utils.parseUnits("1", 18); // Amount to swap (1 token in this case)
