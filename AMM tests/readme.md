@@ -20,27 +20,26 @@ Before using this GitHub Action, make sure you have the following prerequisites 
 
 To use this GitHub Action, follow these steps:
 
-1. Create a `.github/workflows/main.yml` file in your repository with the following content:
+1. Create a `.env` file in your repository with your Ethereum wallet and contract configuration as provided in your question.
 
-```yaml
-# Your main.yml content here
-- Create a .env file in your repository with your Ethereum wallet and contract configuration as provided in your question.
+2. Commit these changes to your repository.
 
-Commit these changes to your repository.
+3. Now, whenever you want to run the Automated AMM workflow, follow these steps:
 
-Now, whenever you want to run the Automated AMM workflow, follow these steps:
+   - Go to your GitHub repository.
 
-Go to your GitHub repository.
+   - Click on the "Actions" tab.
 
-Click on the "Actions" tab.
+   - Select the "Automated AMM" workflow.
 
-Select the "Automated AMM" workflow.
+   - Click the "Run workflow" button.
 
-Click the "Run workflow" button.
+The workflow will start and execute the AMM tasks as specified in the GitHub Actions workflow, using the configuration from your `.env` file.
 
-The workflow will start and execute the AMM tasks as specified in the main.yml file, using the configuration from your .env file.
+**Important Note**: Make sure to keep your `.env` file secure and never share it publicly, as it contains sensitive information.
 
-Important Note: Make sure to keep your .env file secure and never share it publicly, as it contains sensitive information.
+## Security Considerations
 
-Security Considerations
 Since this Action involves private keys and sensitive information, be cautious when sharing your repository with others. It's recommended to use GitHub Secrets to store sensitive data securely and avoid exposing sensitive information in your repository.
+
+With this GitHub Action, you can easily automate AMM tasks in your Ethereum project, making it more efficient and less error-prone.
