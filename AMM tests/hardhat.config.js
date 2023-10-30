@@ -26,18 +26,28 @@ module.exports = {
     TESTNET: {
       url: process.env.RPC, // Specify the URL for the testnet
       chainId: parseInt(process.env.CHAIN_ID), // Parse the chain ID as an integer
-      gas: 2100000,
-      gasPrice: 50000000000,
       accounts: [process.env.PRIVATE_KEY],
     },
   },
   solidity: {
-    version: "0.8.1",
-    settings: {
-      optimizer: {
-        enabled: true,
+    compilers: [
+      {
+        version: '0.5.16',
+        settings: {},
       },
-    },
+      {
+        version: '0.6.6',
+        settings: {},
+      },
+      {
+        version: "0.8.1",
+        settings: {
+        optimizer: {
+          enabled: true,
+        },
+      },
+      },  
+    ],
   },
   paths: {
     sources: "./contracts",
