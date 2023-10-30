@@ -21,7 +21,9 @@ jobs:
           node-version: 18.14.2
 
       - name: Install Dependencies
-        run: npm install
+        run: | 
+             npm install
+             npm install @uniswap/lib
 
       - name: AMM Swap and Liquidity Scripts
         run: |
