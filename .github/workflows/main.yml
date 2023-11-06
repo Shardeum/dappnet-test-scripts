@@ -26,6 +26,6 @@ jobs:
 
       - name: AMM Swap and Liquidity Scripts
         run: |
-          npx hardhat run scripts/addLiquidity.js --network TESTNET
-          npx hardhat run scripts/AMMSwap.js --network TESTNET
-          npx hardhat run scripts/removeLiquidity.js --network TESTNET
+          npx hardhat run scripts\addLiquidity.js --network sphinx
+          npx hardhat run scripts\AMMSwap.js --network sphinx
+          npx hardhat run scripts\removeLiquidity.js --network sphinx
