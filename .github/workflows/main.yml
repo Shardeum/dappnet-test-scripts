@@ -23,7 +23,6 @@ jobs:
       - name: Install Dependencies
         run: | 
              npm install
-             npm install @uniswap/lib
 
       - name: AMM Swap and Liquidity Scripts
         run: |
