@@ -1,16 +1,17 @@
 const { ethers } = require('ethers');
+const routerArtifact = require('@uniswap/v2-periphery/build/UniswapV2Router02.json')
 
-
-const privateKey = '';
-const provider = new ethers.providers.JsonRpcProvider('https://dapps.shardeum.org');
+const privateKey = process.env.PRIVATE_KEY;
+const provider = new ethers.providers.JsonRpcProvider(process.env.RPC);
 const wallet = new ethers.Wallet(privateKey, provider);
-const tokenAAddress = '0x5a4349f4C10B83F6e9239D9682811AEBb2618C35';
-const tokenBAddress = '0x16C0F1034E9085392FAFc8d03c0a393eB3782233';
-const uniswapRouterAddress = '0x468E5c1A2442CF52aaD5d077365341EAE56749EF';
+const tokenAAddress = process.env.TOKEN_A_ADDRESS;
+const tokenBAddress = process.env.TOKEN_B_ADDRESS;
+const uniswapRouterAddress = process.env.ROUTER_ADDRESS;
 const erc20Abi = [
   'function approve(address spender, uint256 amount) public returns (bool)',
 ];
-const uniswapRouterAbi = [
+const uniswapRouterAbi = routerArtifact.abi;
+/*const uniswapRouterAbi = [
 	{
 		"inputs": [
 			{
@@ -982,7 +983,7 @@ const uniswapRouterAbi = [
 		"stateMutability": "payable",
 		"type": "receive"
 	}
-];
+];*/
 const tokenAMintAbi = [
   'function mint(address to, uint256 amount) public',
 ];
@@ -991,7 +992,7 @@ const tokenA = new ethers.Contract(tokenAAddress, erc20Abi, wallet);
 const tokenAMint = new ethers.Contract(tokenAAddress, tokenAMintAbi, wallet);
 const uniswapRouter = new ethers.Contract(uniswapRouterAddress, uniswapRouterAbi, wallet);
 
-const amountIn = ethers.utils.parseUnits('1', 18); 
+const amountIn = ethers.utils.parseUnits('50', 18); 
 const amountOutMin = 0; 
 const path = [tokenAAddress, tokenBAddress];
 const deadline = Math.floor(Date.now() / 1000) + 60 * 200; 

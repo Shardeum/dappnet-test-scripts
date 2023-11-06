@@ -1,42 +1,55 @@
-const { ethers } = require("ethers");
-require("dotenv").config();
+const { Contract, ContractFactory, utils, constants } = require('ethers');
+const routerArtifact = require('@uniswap/v2-periphery/build/UniswapV2Router02.json');
+const usdtArtifact = require('../artifacts/contracts/Tether.sol/Tether.json');
 
-const providerUrl = process.env.RPC;
-const privateKey = process.env.PRIVATE_KEY;
-const routerAddress = process.env.ROUTER_ADDRESS; // Uniswap Router contract address
-const tokenInAddress = process.env.TokenInAddress; // Address of the token you want to swap
-const tokenOutAddress = process.env.TokenOutAddress; // Address of the token you want to receive
-const amountIn = ethers.utils.parseUnits("1", 18); // Amount to swap (1 token in this case)
-const minAmountOut = 0; // Minimum amount of the output token you want to receive
+async function ammSwap() {
+  const [owner] = await ethers.getSigners();
 
-async function swapTokens() {
-  const provider = new ethers.JsonRpcProvider(providerUrl);
-  const wallet = new ethers.Wallet(privateKey, provider);
+  // Define the address of the already deployed Router
+  const ROUTER_ADDRESS = process.env.ROUTER_ADDRESS;
 
-  const router = new ethers.Contract(routerAddress, [
-    "function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)",
-  ], wallet);
+  // Load the existing Router contract
+  const router = new Contract(ROUTER_ADDRESS, routerArtifact.abi, owner);
 
-  const deadline = Math.floor(Date.now() / 1000) + 120; // 2 minutes from now
+  // Define the addresses of the tokens
+  const usdtAddress = process.env.TOKEN_A_ADDRESS;
+  const tokenToSwapForAddress = process.env.TOKEN_B_ADDRESS; // Replace with the target token address
 
-  const tx = await router.swapExactTokensForTokens(
-    amountIn,
+  // Load the token contracts
+  const usdt = new Contract(usdtAddress, usdtArtifact.abi, owner);
+
+  // Approve USDT for the router to spend
+  await usdt.connect(owner).approve(router.address, constants.MaxUint256);
+
+  // Define the amount of USDT to swap
+  const amountToSwap = utils.parseUnits('50'); // Adjust the amount as needed
+
+  // Define other parameters
+  const path = [usdt.address, tokenToSwapForAddress]; // Swap from USDT to the target token
+  const minAmountOut = 0; // Minimum amount of target tokens to receive
+  const deadline = Math.floor(Date.now() / 1000 + 600); // 10-minute deadline
+
+  // Perform the AMM swap
+  const swapTx = await router.connect(owner).swapExactTokensForTokens(
+    amountToSwap,
     minAmountOut,
-    [tokenInAddress, tokenOutAddress],
-    wallet.address, // You'll receive the output tokens in the same wallet
-    deadline
+    path,
+    owner.address,
+    deadline,
+    { gasLimit: utils.hexlify(1000000) }
   );
 
-  const receipt = await tx.wait();
-  console.log("Swap transaction hash:", receipt.transactionHash);
+  // Wait for the transaction to be confirmed
+  const receipt = await swapTx.wait();
 
-  if (receipt.status === 1) {
-    console.log("Swap successful!");
-  } else {
-    console.error("Swap failed. Check the transaction details.");
-  }
+  // Get the transaction hash from the receipt
+  const txHash = receipt.transactionHash;
+  console.log('AMM Swap Transaction Hash:', txHash);
 }
 
-swapTokens().catch((error) => {
-  console.error("Error:", error);
-});
+ammSwap()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });

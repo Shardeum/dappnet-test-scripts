@@ -1,36 +1,60 @@
-const { ethers } = require("hardhat");
-
-const routerAddress = process.env.ROUTER_ADDRESS;
-const tokenAddress = process.env.TOKEN_ADDRESS;
-const accountPrivateKey = process.env.PRIVATE_KEY; // Replace with your private key
+const { Contract, ContractFactory, utils, constants } = require('ethers');
+const factoryArtifact = require('@uniswap/v2-core/build/UniswapV2Factory.json')
+const routerArtifact = require('@uniswap/v2-periphery/build/UniswapV2Router02.json')
+const pairArtifact = require('@uniswap/v2-periphery/build/IUniswapV2Pair.json')
+const usdtArtifact = require('../artifacts/contracts/Tether.sol/Tether.json');
+const usdcArtifact = require('../artifacts/contracts/UsdCoin.sol/UsdCoin.json');
 
 async function removeLiquidity() {
-  const [account] = await ethers.getSigners();
+  const [owner] = await ethers.getSigners();
 
-  const router = new ethers.Contract(routerAddress, [
-    "function removeLiquidityETHWithPermit(address token, uint liquidity, uint amountTokenMin, uint amountETHMin, address to, uint deadline, bool approveMax, uint8 v, bytes32 r, bytes32 s) external returns (uint amountToken, uint amountETH)"
-  ], account);
+  // Define the addresses of the already deployed Factory and Router
+  const FACTORY_ADDRESS = process.env.FACTORY_ADDRESS;
+  const ROUTER_ADDRESS = process.env.ROUTER_ADDRESS;
 
-  // Define the amount of liquidity you want to remove
-  const amountToRemove = ethers.utils.parseEther("0.5"); // Replace with the desired amount
+  // Load existing Factory and Router contracts
+  const factory = new Contract(FACTORY_ADDRESS, factoryArtifact.abi, owner);
+  const router = new Contract(ROUTER_ADDRESS, routerArtifact.abi, owner);
 
-  // Remove liquidity from the pair
-  const deadline = Math.floor(Date.now() / 1000) + 60; // Set a reasonable deadline
-  const liquidity = await router.removeLiquidityETHWithPermit(
-    tokenAddress,
-    amountToRemove,
-    0, // amountTokenMin (0 means no minimum)
-    0, // amountETHMin (0 means no minimum)
-    account.address,
+  // Define the addresses of the tokens
+  const usdtAddress = process.env.TOKEN_A_ADDRESS;
+  const usdcAddress = process.env.TOKEN_B_ADDRESS;
+
+  // Load the token contracts
+  const usdt = new Contract(usdtAddress, usdtArtifact.abi, owner);
+  const usdc = new Contract(usdcAddress, usdcArtifact.abi, owner);
+
+  // Define token amounts and other parameters
+  const liquidityAmount = utils.parseUnits('50'); // Adjust to the amount of liquidity you want to remove
+  const minAmountA = 0; // Adjust to your desired minimum amount of token A
+  const minAmountB = 0; // Adjust to your desired minimum amount of token B
+  const deadline = Math.floor(Date.now() / 1000 + 600); // 10-minute deadline
+
+  // Get the pair address
+  const pairAddress = await factory.getPair(usdt.address, usdc.address);
+  const pair = new Contract(pairAddress, pairArtifact.abi, owner);
+
+  // Approve the router to spend your LP tokens
+  await pair.connect(owner).approve(router.address, liquidityAmount);
+
+  // Remove liquidity
+  const removeLiquidityTx = await router.connect(owner).removeLiquidity(
+    usdt.address,
+    usdc.address,
+    liquidityAmount,
+    minAmountA,
+    minAmountB,
+    owner.address,
     deadline,
-    false, // approveMax
-    0, // v
-    "0x", // r
-    "0x"  // s
+    { gasLimit: utils.hexlify(1000000) }
   );
 
-  // Wait for the transaction to be mined
-  await liquidity.wait();
+  // Wait for the transaction to be confirmed
+  const receipt = await removeLiquidityTx.wait();
+
+  // Get the transaction hash from the receipt
+  const txHash = receipt.transactionHash;
+  console.log('Remove Liquidity Transaction Hash:', txHash);
 }
 
 removeLiquidity()
